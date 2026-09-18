@@ -96,8 +96,12 @@ export const getItemByCity = async (req, res) => {
         if (!city) {
             return res.status(400).json({ message: "city is required" })
         }
+        
+        // Escape special characters like ( ) in the city name
+        const escapedCity = city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
         const shops = await Shop.find({
-            city: { $regex: new RegExp(`^${city}$`, "i") }
+            city: { $regex: new RegExp(`^${escapedCity}$`, "i") }
         }).populate('items')
         if (!shops) {
             return res.status(400).json({ message: "shops not found" })

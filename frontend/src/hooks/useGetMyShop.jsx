@@ -10,6 +10,7 @@ function useGetMyshop() {
     const {userData}=useSelector(state=>state.user)
   useEffect(()=>{
   const fetchShop=async () => {
+    if(!userData) return;
     try {
            const result=await axios.get(`${serverUrl}/api/shop/get-my`,{withCredentials:true})
             dispatch(setMyShopData(result.data))

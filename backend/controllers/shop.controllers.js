@@ -45,9 +45,12 @@ export const getMyShop=async (req,res) => {
 export const getShopByCity=async (req,res) => {
     try {
         const {city}=req.params
+        
+        // Escape special characters like ( ) in the city name
+        const escapedCity = city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
         const shops=await Shop.find({
-            city:{$regex:new RegExp(`^${city}$`, "i")}
+            city:{$regex:new RegExp(`^${escapedCity}$`, "i")}
         }).populate('items')
         if(!shops){
             return res.status(400).json({message:"shops not found"})
